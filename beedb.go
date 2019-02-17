@@ -118,7 +118,7 @@ func (orm *Model) ScanPK(output interface{}) *Model {
 
 }
 
-//The join_operator should be one of INNER, LEFT OUTER, CROSS etc - this will be prepended to JOIN
+// Join: The join_operator should be one of INNER, LEFT OUTER, CROSS etc - this will be prepended to JOIN
 func (orm *Model) Join(join_operator, tablename, condition string) *Model {
 	if orm.JoinStr != "" {
 		orm.JoinStr = orm.JoinStr + fmt.Sprintf(" %v JOIN %v ON %v", join_operator, tablename, condition)
@@ -362,7 +362,7 @@ func (orm *Model) generateSql() (a string) {
 	return
 }
 
-//Execute sql
+// Exec executes sql
 func (orm *Model) Exec(finalQueryString string, args ...interface{}) (sql.Result, error) {
 	rs, err := orm.Db.Prepare(finalQueryString)
 	if err != nil {
@@ -377,7 +377,7 @@ func (orm *Model) Exec(finalQueryString string, args ...interface{}) (sql.Result
 	return res, nil
 }
 
-//if the struct has PrimaryKey == 0 insert else update
+// Save: if the struct has PrimaryKey == 0 insert else update
 func (orm *Model) Save(output interface{}) error {
 	orm.ScanPK(output)
 	results, err := scanStructIntoMap(output)
@@ -427,7 +427,7 @@ func (orm *Model) Save(output interface{}) error {
 	return nil
 }
 
-//inert one info
+// Insert: inert one info
 func (orm *Model) Insert(properties map[string]interface{}) (int64, error) {
 	defer orm.InitModel()
 	var keys []string
@@ -478,7 +478,7 @@ func (orm *Model) Insert(properties map[string]interface{}) (int64, error) {
 	return -1, nil
 }
 
-//insert batch info
+// InsertBatch: insert batch info
 func (orm *Model) InsertBatch(rows []map[string]interface{}) ([]int64, error) {
 	var ids []int64
 	tablename := orm.TableName
